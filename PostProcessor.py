@@ -24,6 +24,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tabulate import tabulate  # Import tabulate
 from MO_energy_function import MO_Sim_energy
+import os
 
  
 def postplot(result): 
@@ -172,39 +173,70 @@ def MO_postplot(F_opt, X_opt, global_parameters, Q, turbine_characteristics):
     cols = ['Objective'] + [c for c in best_table.columns if c != 'Objective']
     best_table = best_table[cols]
 
+    # SAVE THE TABLES TO CSV FILES
+    op_table.to_csv('optimization_table.csv', index=False)
+    best_table.to_csv('best_table.csv', index=False)
+    print("SAVED: optimization_table.csv and best_table.csv")
+
     return op_table, best_table
     
 
 def MO_scatterplot(F1, F2):
+    # Get dam info from environment variables
+    dam_name = os.environ.get('CURRENT_DAM_NAME', 'Unknown Dam')
+    record_id = os.environ.get('CURRENT_DAM_RECORDID', 'Unknown ID')
 
+    plt.figure(figsize=(10, 8))
     plt.scatter(-1 * F1, -1 * F2, color='blue')
     plt.xlabel("NPV (Million USD)", fontsize=15)
     plt.ylabel("BC (-)", fontsize=16)
     plt.title("Optimization Results", fontsize=15)
     plt.tick_params(axis='both', which='major', labelsize=12, width=2)
+    
+    # Add dam info below the plot
+    plt.figtext(0.5, 0.02, f"{dam_name} (Record ID: {record_id})", 
+                ha='center', fontsize=12, style='italic')
+    
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.15) 
+    
+    # Save the plot to disk
+    plt.savefig('mo_scatterplot.png', dpi=300, bbox_inches='tight')
+    print("SAVED: mo_scatterplot.png")
     plt.show()
 
 
 def MO_scatterplot2(F1, F2, F3, F4):
+    # Get dam info from environment variables
+    dam_name = os.environ.get('CURRENT_DAM_NAME', 'Unknown Dam')
+    record_id = os.environ.get('CURRENT_DAM_RECORDID', 'Unknown ID')
     
-    fig, axs = plt.subplots(1, 2, figsize=(14, 6), gridspec_kw={'wspace': 0.4})
+    fig, axs = plt.subplots(1, 2, figsize=(14, 8), gridspec_kw={'wspace': 0.4})
+    
     # First subplot
-    axs[0].scatter( F1,  F2, color='blue')
+    axs[0].scatter(F1, F2, color='blue')
     axs[0].set_xlabel("NPV (Million USD)", fontsize=24)
     axs[0].set_ylabel("BC (-)", fontsize=24)
     axs[0].set_title("Optimization Results", fontsize=22)
     axs[0].tick_params(axis='both', which='major', labelsize=18, width=2)
 
     # Second subplot
-    axs[1].scatter( F3, F4, color='green')
+    axs[1].scatter(F3, F4, color='green')
     axs[1].set_xlabel("NPV (Million USD)", fontsize=24)
     axs[1].set_ylabel("BC (-)", fontsize=24)
     axs[1].set_title("Optimization Results + NPD design", fontsize=22)
     axs[1].tick_params(axis='both', which='major', labelsize=18, width=2)
    
-    # Add horizontal space between subplots
-    #plt.subplots_adjust(wspace=0.6)  
-    #plt.tight_layout()
+    # Add dam info below the plots
+    fig.text(0.5, 0.02, f"{dam_name} (Record ID: {record_id})", 
+             ha='center', fontsize=14, style='italic')
+    
+    plt.tight_layout()
+    plt.subplots_adjust(bottom=0.1)  # Make room for dam info
+    
+    # Save the plot to disk
+    plt.savefig('optimization_results.png', dpi=300, bbox_inches='tight')
+    print("SAVED: optimization_results.png")
     plt.show()
 
 

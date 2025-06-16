@@ -279,4 +279,3 @@ def MO_Sim_energy (Q, typet, conf, X, global_parameters, turbine_characteristics
     OF2 = AR / AC # BC
 
     return  OF1, OF2,  AAE,  Cost
-

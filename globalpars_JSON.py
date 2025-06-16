@@ -46,10 +46,10 @@ global_parameters = {
     "operating_scheme": 1,
     "ObjectiveF": 1,
     "case_specific": {
-        "hg": 9.6012,
+        "hg": 25.908,
         "om": 0.01,
         "fxc": 0,
-        "ep": 0.05577,
+        "ep": 0.04465,
         "ir": 0.05,
         "N": 50,
     },
@@ -73,4 +73,3 @@ global_parameters = {
 # Save the parameters to a JSON file
 with open('global_parameters.json', 'w') as json_file:
     json.dump(global_parameters, json_file, indent=4)
-
